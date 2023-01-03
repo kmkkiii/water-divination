@@ -1,10 +1,13 @@
 let capture;
+
 // webカメラのロードフラグ
 let videoDataLoaded = false;
 
 let handsfree;
 
 const circleSize = 10;
+
+let isActive = false;
 
 // 各指のカラーパレット
 const thumb = "#f15bb5",
@@ -34,6 +37,8 @@ function setup() {
     maxNumHands: 2,
   });
 
+  // ジェスチャー登録
+  // 水見式 左手
   handsfree.useGesture({
     "name": "leftHand",
     "algorithm": "fingerpose",
@@ -110,6 +115,7 @@ function setup() {
     "enabled": true
   });
 
+  // 水見式 右手
   handsfree.useGesture({
     "name": "rightHand",
     "algorithm": "fingerpose",
@@ -220,14 +226,22 @@ function draw() {
   drawHands();
 
   // 水見式のジェスチャーを認識させる
-  // handsfree.data?.hands.gestureの0,1番目にデータがあればそこから数秒間カウントして結果を表示させる
-  // TODO:左右の手がそれぞれコップの左右に配置されていることを座標を読み取って判定する
-  if (handsfree.data?.hands?.gesture[0]?.name && handsfree.data?.hands?.gesture[1]?.name) {
-    console.log("水見式を開始");
+  const hands = handsfree.data?.hands;
+  if (!hands?.multiHandLandmarks) return;
+  if (
+      isActive === false &&
+      hands?.gesture[0]?.name == "leftHand" &&
+      hands?.gesture[1]?.name == "rightHand" &&
+      hands.multiHandLandmarks[0][21].x < 0.5 &&
+      hands.multiHandLandmarks[0][21].y > 0.5 &&
+      hands.multiHandLandmarks[1][21].x > 0.5 &&
+      hands.multiHandLandmarks[1][21].y > 0.5
+      ) {
+    isActive = true;
+    // console.log("水見式を開始");
+    // 6系統からランダムに取得
+    lot();
   }
-
-  // 6系統からランダムに取得
-  // lot();
 }
 
 // landmarkにcircleを描画
@@ -279,5 +293,6 @@ function lot() {
   ];
 
   const rand = Math.floor(Math.random() * categories.length);
-  console.log(categories[rand]);
+  // console.log(categories[rand]);
+  document.getElementById("result").innerText = `あなたのオーラは ${categories[rand]} です`;
 }
