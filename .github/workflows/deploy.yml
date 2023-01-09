@@ -39,13 +39,15 @@ jobs:
         run: yarn
       - name: Build
         run: yarn build
+        env:
+          GITHUB_PAGES: true
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Viteのbuildコマンド出力先
-          path: './dist'
+          path: "./dist"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
