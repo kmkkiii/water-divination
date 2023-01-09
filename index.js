@@ -23,7 +23,7 @@ function setup() {
   // 映像をロードできたらキャンバスの大きさを設定
   capture.elt.onloadeddata = function () {
     videoDataLoaded = true;
-    let canvas = createCanvas(capture.width * 1.5, capture.height * 1.5);
+    let canvas = createCanvas(capture.width * 1.25, capture.height * 1.25);
     canvas.parent("canvas");
   };
 
@@ -198,32 +198,14 @@ function draw() {
   image(capture, 0, 0, width, height);
   pop();
 
-  // // 水見式のコップを画面中央下部に配置
-  const center = width / 2;
-  const top = 250;
-  const bottom = 30;
-  const topDiameter = 200;
-  const bottomDiameter = 124;
+  // コップ
+  drawCup();
 
-  fill(255);
-  quad(
-    center - topDiameter / 2,
-    height - top, center + topDiameter / 2,
-    height - top, center + bottomDiameter / 2,
-    height - bottom, center - bottomDiameter / 2,
-    height - bottom
-  );
-  ellipse(center, height - top , topDiameter, 50);
-  ellipse(center, height - bottom , bottomDiameter, 30);
-
-  // ワイングラス
-  // arc(width / 2, height - 300, 225, 300, 0, PI, OPEN);
-  // ellipse(width / 2, height - 300, 225, 30);
-  // ellipse(width / 2, height - 25, 150, 25);
-  // rect(width / 2 - 5, height - 150, 10, 125);
+  // 葉っぱ
+  drawLeaf();
 
   // 手の頂点を表示
-  drawHands();
+  // drawHands();
 
   // 水見式のジェスチャーを認識させる
   const hands = handsfree.data?.hands;
@@ -278,6 +260,81 @@ function drawHands() {
       circle(width - landmark.x * width, landmark.y * height, circleSize);
     });
   });
+}
+
+// 水見式のコップ
+function drawCup() {
+  const center = width / 2;
+  const top = 250;
+  const bottom = 30;
+  const topDiameter = 200;
+  const bottomDiameter = 124;
+
+  fill(255);
+  quad(
+    center - topDiameter / 2,
+    height - top, center + topDiameter / 2,
+    height - top, center + bottomDiameter / 2,
+    height - bottom, center - bottomDiameter / 2,
+    height - bottom
+  );
+  ellipse(center, height - top , topDiameter, 50);
+  ellipse(center, height - bottom , bottomDiameter, 30);
+}
+
+// ワイングラス
+function drawWineGlass() {
+  arc(width / 2, height - 300, 225, 300, 0, PI, OPEN);
+  ellipse(width / 2, height - 300, 225, 30);
+  ellipse(width / 2, height - 25, 150, 25);
+  rect(width / 2 - 5, height - 150, 10, 125);
+}
+
+// 葉っぱ
+function drawLeaf() {
+  const n = 4;
+  const size = 100;
+  const ox = width / 2 - 25;
+  const oy = height / 2;
+  let xmax;
+  let ymax;
+  const veins = 0.9; //葉脈の長さ
+  const petiole = -0.25; //葉柄の長さ
+
+  // noStroke();
+  stroke(0);
+  translate(ox, oy);
+  beginShape();
+  for (let t = 0; t < 360 / n; t++) {
+    const bulge = 1.2; //葉の膨らみ
+    A = (n / PI) * radians(t);
+
+    md = floor(A) % 2;
+
+    r = pow(-1, md) * (A - floor(A)) + md;
+
+    R = r;
+
+    x = size * R * cos(bulge * radians(t));
+    y = size * R * sin(radians(t));
+
+    if (t == 45) {
+      xmax = x;
+      ymax = y;
+    }
+    fill("#42C668",);
+    vertex(x, y);
+  }
+
+  endShape(CLOSE);
+
+  stroke(0); // 線の色
+  strokeWeight(0.5); // 線の太さ
+  line(0, 0, xmax * veins, ymax * veins);
+
+  stroke(0); // 線の色
+  strokeWeight(2); // 線の太さ
+  line(0, 0, xmax * petiole, ymax * petiole);
 }
 
 // 6系統の中からランダムで取得
