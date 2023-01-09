@@ -353,8 +353,11 @@ export function App() {
     document.getElementById("result").innerText = `あなたのオーラは ${categories[rand]} です`;
   }
 
-  const startHandsfree = () => {handsfree.start()}
-  const stopHandsfree = () => {handsfree.stop()}
+  const startWaterDivination = () => {handsfree.start()}
+  const retry = () => {
+    isActive = false;
+    document.getElementById("result").innerText = '';
+  }
 
   return (
     <>
@@ -362,9 +365,9 @@ export function App() {
       <div>
         <p>水をたっぷりと入れて葉を浮かべたコップに手をかざして「練」を数秒間行ってください。<br/>変化に応じて自分のオーラがどの系統に属するかがわかります。</p>
         <p>
-          <button className="handsfree-show-when-stopped handsfree-hide-when-loading" onClick={startHandsfree}>Start handsfree</button>
-          <button className="handsfree-show-when-loading">...loading...</button>
-          <button className="handsfree-show-when-started" onClick={stopHandsfree}>Stop handsfree</button>
+          <button className="handsfree-show-when-stopped handsfree-hide-when-loading" onClick={startWaterDivination}>水見式を始める</button>
+          <button className="handsfree-show-when-loading">loading...</button>
+          <button className="handsfree-show-when-started" onClick={retry}>もう一度</button>
         </p>
         <p id="result"></p>
         <Sketch setup={setup} draw={draw}/>
