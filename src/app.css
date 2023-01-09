@@ -1,0 +1,10 @@
+#app {
+  margin: 0 auto;
+  text-align: center;
+}
+
+#result {
+  color: red;
+  font-weight: bold;
+  font-size: 24;
+}
