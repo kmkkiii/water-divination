@@ -6,7 +6,6 @@ export function App() {
   window.handsfree.update({
     hands: true,
   });
-  window.handsfree.enablePlugins('browser');
 
   let capture;
 
