@@ -8,3 +8,20 @@
   font-weight: bold;
   font-size: 24;
 }
+
+.tweet_img {
+  color: rgb(38, 172, 250);
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+	border: 1px solid #ccc;
+	border-radius:20px;
+	padding: 5px 20px;
+	width: 50%;
+	max-width: 100%;
+}
+
+.tweet_img:hover {
+  color:rgb(31, 145, 211);
+
+}

@@ -1,5 +1,6 @@
 import './app.css'
 import Sketch from "react-p5";
+import { Icon } from "@iconify/react";
 
 export function App() {
   // handsfreeのhandモデルを準備
@@ -373,6 +374,11 @@ export function App() {
         </p>
         <p id="result"></p>
         <Sketch setup={setup} draw={draw}/>
+        <p>
+          <a href="https://twitter.com/intent/tweet?text=あなたのオーラは○○系でした%20https://%20pic.twitter.com/@user" target="_blank" class="tweet_img">
+            <div>水見式の結果をツイートする <Icon icon="bi:twitter" aria-hidden="true" /></div>
+          </a>
+        </p>
       </div>
     </>
   )
