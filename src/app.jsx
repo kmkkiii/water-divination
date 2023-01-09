@@ -351,12 +351,14 @@ export function App() {
     const rand = Math.floor(Math.random() * categories.length);
 
     document.getElementById("result").innerText = `あなたのオーラは ${categories[rand]} です`;
+    document.getElementById("retry").innerText = "もう一度";
   }
 
   const startWaterDivination = () => {handsfree.start()}
   const retry = () => {
     isActive = false;
     document.getElementById("result").innerText = '';
+    document.getElementById("retry").innerText = '判定中';
   }
 
   return (
@@ -367,7 +369,7 @@ export function App() {
         <p>
           <button className="handsfree-show-when-stopped handsfree-hide-when-loading" onClick={startWaterDivination}>水見式を始める</button>
           <button className="handsfree-show-when-loading">loading...</button>
-          <button className="handsfree-show-when-started" onClick={retry}>もう一度</button>
+          <button className="handsfree-show-when-started" id="retry" onClick={retry}>判定中</button>
         </p>
         <p id="result"></p>
         <Sketch setup={setup} draw={draw}/>
