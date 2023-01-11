@@ -1,6 +1,7 @@
 import './app.css'
 import Sketch from "react-p5";
 import { Icon } from "@iconify/react";
+import { useState } from "preact/hooks";
 
 export function App() {
   // handsfreeのhandモデルを準備
@@ -13,7 +14,7 @@ export function App() {
   // webカメラのロードフラグ
   let videoDataLoaded = false;
 
-  let isActive = false;
+  let complete = false;
 
   // 各指のカラーパレット
   const thumb = "#f15bb5",
@@ -211,7 +212,7 @@ export function App() {
     const hands = handsfree.data?.hands;
     if (!hands?.multiHandLandmarks) return;
     if (
-        isActive === false &&
+        complete === false &&
         hands?.gesture[0]?.name == "leftHand" &&
         hands?.gesture[1]?.name == "rightHand" &&
         hands.multiHandLandmarks[0][21].x < 0.5 &&
@@ -219,7 +220,7 @@ export function App() {
         hands.multiHandLandmarks[1][21].x > 0.5 &&
         hands.multiHandLandmarks[1][21].y > 0.5
         ) {
-      isActive = true;
+      complete = true;
       // console.log("水見式を開始");
       // 6系統からランダムに取得
       lot();
@@ -355,9 +356,22 @@ export function App() {
     document.getElementById("retry").innerText = "もう一度";
   }
 
-  const startWaterDivination = () => {handsfree.start()}
+  const [mediaIsActive, setMediaIsActive] = useState(false);
+
+  const startWaterDivination = async () => {
+    // カメラ使用の許可を要求
+    await navigator.mediaDevices.getUserMedia({video: true})
+    .then(function(stream) {
+      setMediaIsActive(stream.active);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+
+    handsfree.start();
+  }
   const retry = () => {
-    isActive = false;
+    complete = false;
     document.getElementById("result").innerText = '';
     document.getElementById("retry").innerText = '判定中';
   }
@@ -373,7 +387,7 @@ export function App() {
           <button className="handsfree-show-when-started" id="retry" onClick={retry}>判定中</button>
         </p>
         <p id="result"></p>
-        <Sketch setup={setup} draw={draw}/>
+        {mediaIsActive ? <Sketch setup={setup} draw={draw}/> : null}
         <p>
           <a href="https://twitter.com/intent/tweet?text=あなたのオーラは○○系でした%20https://%20pic.twitter.com/@user" target="_blank" class="tweet_img">
             <div>水見式の結果をツイートする <Icon icon="bi:twitter" aria-hidden="true" /></div>
