@@ -16,6 +16,9 @@
   "devDependencies": {
     "@iconify/react": "^4.0.1",
     "@preact/preset-vite": "^2.4.0",
+    "eslint": "^8.31.0",
+    "eslint-config-eslint": "^7.0.0",
+    "eslint-plugin-react": "^7.31.11",
     "vite": "^4.0.0"
   }
 }
