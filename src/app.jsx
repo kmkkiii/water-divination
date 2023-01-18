@@ -44,21 +44,27 @@ export function App() {
       name: "leftHand",
       algorithm: "fingerpose",
       models: "hands",
-      confidence: 7.5,
+      confidence: 8.5,
       description: [
         ["addCurl", "Thumb", "NoCurl", 1],
         ["addDirection", "Thumb", "DiagonalUpLeft", 1],
-        ["addCurl", "Index", "NoCurl", 1],
+        ["addCurl", "Index", "HalfCurl", 1],
+        ["addCurl", "Index", "NoCurl", 0.6666666666666666],
         ["addDirection", "Index", "HorizontalLeft", 1],
-        ["addDirection", "Index", "DiagonalUpLeft", 0.034482758620689655],
+        ["addDirection", "Index", "DiagonalUpLeft", 0.6666666666666666],
         ["addCurl", "Middle", "NoCurl", 1],
+        ["addCurl", "Middle", "HalfCurl", 0.5789473684210527],
         ["addDirection", "Middle", "HorizontalLeft", 1],
+        ["addDirection", "Middle", "DiagonalUpLeft", 0.5789473684210527],
         ["addCurl", "Ring", "NoCurl", 1],
+        ["addCurl", "Ring", "HalfCurl", 0.5],
         ["addDirection", "Ring", "HorizontalLeft", 1],
+        ["addDirection", "Ring", "DiagonalUpLeft", 0.034482758620689655],
         ["addCurl", "Pinky", "NoCurl", 1],
+        ["addCurl", "Pinky", "FullCurl", 0.13636363636363635],
+        ["addCurl", "Pinky", "HalfCurl", 0.22727272727272727],
         ["addDirection", "Pinky", "HorizontalLeft", 1],
       ],
-      enabled: true,
     });
 
     // 水見式 右手
@@ -66,20 +72,24 @@ export function App() {
       name: "rightHand",
       algorithm: "fingerpose",
       models: "hands",
-      confidence: 7.5,
+      confidence: 8.5,
       description: [
         ["addCurl", "Thumb", "NoCurl", 1],
         ["addDirection", "Thumb", "DiagonalUpRight", 1],
         ["addCurl", "Index", "NoCurl", 1],
+        ["addCurl", "Index", "HalfCurl", 0.875],
         ["addDirection", "Index", "HorizontalRight", 1],
+        ["addDirection", "Index", "DiagonalUpRight", 0.5],
         ["addCurl", "Middle", "NoCurl", 1],
+        ["addCurl", "Middle", "HalfCurl", 0.42857142857142855],
         ["addDirection", "Middle", "HorizontalRight", 1],
         ["addCurl", "Ring", "NoCurl", 1],
+        ["addCurl", "Ring", "HalfCurl", 0.25],
         ["addDirection", "Ring", "HorizontalRight", 1],
         ["addCurl", "Pinky", "NoCurl", 1],
+        ["addCurl", "Pinky", "HalfCurl", 0.034482758620689655],
         ["addDirection", "Pinky", "HorizontalRight", 1],
       ],
-      enabled: true,
     });
   };
 
@@ -268,7 +278,12 @@ export function App() {
     // カメラ使用の許可を要求
     await navigator.mediaDevices
       .getUserMedia({ video: true })
-      .then(function (stream) {
+      .then(async (stream) => {
+        const devices = (
+          await navigator.mediaDevices.enumerateDevices()
+        ).filter((device) => device.kind === "videoinput");
+        console.log(devices);
+        console.log(stream);
         setMediaIsActive(stream.active);
       })
       .catch(function (err) {
