@@ -81,9 +81,6 @@ export function App() {
       ],
       enabled: true,
     });
-
-    // handsfreeを開始
-    // handsfree.start();
   };
 
   const draw = (p5) => {
@@ -118,7 +115,7 @@ export function App() {
       hands.multiHandLandmarks[1][21].y > 0.5
     ) {
       complete = true;
-      // console.log("水見式を開始");
+
       // 6系統からランダムに取得
       lot();
     }
@@ -127,7 +124,7 @@ export function App() {
   // landmarkにcircleを描画
   const drawHands = (p5, width, height) => {
     const hands = handsfree.data?.hands;
-    const circleSize = 10;
+    const circleSize = 12;
 
     // 手が検出されなければreturn
     if (!hands?.multiHandLandmarks) return;
@@ -247,14 +244,22 @@ export function App() {
       "操作系", // Conjurer
       "具現化系", // Manipulator
       "変化系", // Emitter
-      "特質系", // Specialist
     ];
+    let resultCategory;
 
-    const rand = Math.floor(Math.random() * categories.length);
+    const rand = Math.floor(Math.random() * 100);
+    console.log(rand);
+    // 特質系が出る確率は10%
+    if (rand < 10) {
+      resultCategory = "特質系"; // Specialist
+    } else {
+      const index = Math.floor(Math.random() * categories.length);
+      resultCategory = categories[index];
+    }
 
     document.getElementById(
       "result"
-    ).innerText = `あなたのオーラは ${categories[rand]} です`;
+    ).innerText = `あなたのオーラは ${resultCategory} です`;
     document.getElementById("retry").innerText = "もう一度";
   };
 
@@ -273,6 +278,7 @@ export function App() {
 
     handsfree.start();
   };
+
   const retry = () => {
     complete = false;
     document.getElementById("result").innerText = "";
@@ -285,9 +291,8 @@ export function App() {
       <div>
         <p>
           水をたっぷりと入れて葉を浮かべたコップに手をかざして「練」を数秒間行ってください。
-          <br />
-          変化に応じて自分のオーラがどの系統に属するかがわかります。
         </p>
+        <p>変化に応じて自分のオーラがどの系統に属するかがわかります。</p>
         <p>
           <button
             className="handsfree-show-when-stopped handsfree-hide-when-loading"
@@ -295,13 +300,13 @@ export function App() {
           >
             水見式を始める
           </button>
-          <button className="handsfree-show-when-loading">loading...</button>
+          <button className="handsfree-show-when-loading">準備中...</button>
           <button
             className="handsfree-show-when-started"
             id="retry"
             onClick={retry}
           >
-            判定中
+            判定中...
           </button>
         </p>
         <p id="result"></p>
