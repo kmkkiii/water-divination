@@ -236,7 +236,6 @@ export function App() {
   };
 
   // 6系統の中からランダムで取得
-  // TODO:確率設定したい
   const lot = () => {
     const categories = [
       "強化系", // Enhancer
