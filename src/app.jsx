@@ -1,4 +1,4 @@
-import './app.css'
+import "./app.css";
 import Sketch from "react-p5";
 import { Icon } from "@iconify/react";
 import { useState } from "preact/hooks";
@@ -18,10 +18,10 @@ export function App() {
 
   // 各指のカラーパレット
   const thumb = "#f15bb5",
-        indexFinger = "#fee440",
-        middleFinger = "#00f5d4",
-        ringFinger = "#00bbf9",
-        pinky = "#9b5de5";
+    indexFinger = "#fee440",
+    middleFinger = "#00f5d4",
+    ringFinger = "#00bbf9",
+    pinky = "#9b5de5";
 
   const setup = (p5, canvasParentRef) => {
     // webカメラの映像を準備
@@ -30,7 +30,9 @@ export function App() {
     // 映像をロードできたらキャンバスの大きさを設定
     capture.elt.onloadeddata = function () {
       videoDataLoaded = true;
-      p5.createCanvas(capture.width * 1.25, capture.height * 1.25).parent(canvasParentRef);
+      p5.createCanvas(capture.width * 1.25, capture.height * 1.25).parent(
+        canvasParentRef
+      );
     };
 
     // 映像を非表示化
@@ -39,155 +41,50 @@ export function App() {
     // ジェスチャー登録
     // 水見式 左手
     handsfree.useGesture({
-      "name": "leftHand",
-      "algorithm": "fingerpose",
-      "models": "hands",
-      "confidence": 7.5,
-      "description": [
-        [
-          "addCurl",
-          "Thumb",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Thumb",
-          "DiagonalUpLeft",
-          1
-        ],
-        [
-          "addCurl",
-          "Index",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Index",
-          "HorizontalLeft",
-          1
-        ],
-        [
-          "addDirection",
-          "Index",
-          "DiagonalUpLeft",
-          0.034482758620689655
-        ],
-        [
-          "addCurl",
-          "Middle",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Middle",
-          "HorizontalLeft",
-          1
-        ],
-        [
-          "addCurl",
-          "Ring",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Ring",
-          "HorizontalLeft",
-          1
-        ],
-        [
-          "addCurl",
-          "Pinky",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Pinky",
-          "HorizontalLeft",
-          1
-        ]
+      name: "leftHand",
+      algorithm: "fingerpose",
+      models: "hands",
+      confidence: 7.5,
+      description: [
+        ["addCurl", "Thumb", "NoCurl", 1],
+        ["addDirection", "Thumb", "DiagonalUpLeft", 1],
+        ["addCurl", "Index", "NoCurl", 1],
+        ["addDirection", "Index", "HorizontalLeft", 1],
+        ["addDirection", "Index", "DiagonalUpLeft", 0.034482758620689655],
+        ["addCurl", "Middle", "NoCurl", 1],
+        ["addDirection", "Middle", "HorizontalLeft", 1],
+        ["addCurl", "Ring", "NoCurl", 1],
+        ["addDirection", "Ring", "HorizontalLeft", 1],
+        ["addCurl", "Pinky", "NoCurl", 1],
+        ["addDirection", "Pinky", "HorizontalLeft", 1],
       ],
-      "enabled": true
+      enabled: true,
     });
 
     // 水見式 右手
     handsfree.useGesture({
-      "name": "rightHand",
-      "algorithm": "fingerpose",
-      "models": "hands",
-      "confidence": 7.5,
-      "description": [
-        [
-          "addCurl",
-          "Thumb",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Thumb",
-          "DiagonalUpRight",
-          1
-        ],
-        [
-          "addCurl",
-          "Index",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Index",
-          "HorizontalRight",
-          1
-        ],
-        [
-          "addCurl",
-          "Middle",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Middle",
-          "HorizontalRight",
-          1
-        ],
-        [
-          "addCurl",
-          "Ring",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Ring",
-          "HorizontalRight",
-          1
-        ],
-        [
-          "addCurl",
-          "Pinky",
-          "NoCurl",
-          1
-        ],
-        [
-          "addDirection",
-          "Pinky",
-          "HorizontalRight",
-          1
-        ]
+      name: "rightHand",
+      algorithm: "fingerpose",
+      models: "hands",
+      confidence: 7.5,
+      description: [
+        ["addCurl", "Thumb", "NoCurl", 1],
+        ["addDirection", "Thumb", "DiagonalUpRight", 1],
+        ["addCurl", "Index", "NoCurl", 1],
+        ["addDirection", "Index", "HorizontalRight", 1],
+        ["addCurl", "Middle", "NoCurl", 1],
+        ["addDirection", "Middle", "HorizontalRight", 1],
+        ["addCurl", "Ring", "NoCurl", 1],
+        ["addDirection", "Ring", "HorizontalRight", 1],
+        ["addCurl", "Pinky", "NoCurl", 1],
+        ["addDirection", "Pinky", "HorizontalRight", 1],
       ],
-      "enabled": true
+      enabled: true,
     });
 
     // handsfreeを開始
     // handsfree.start();
-  }
+  };
 
   const draw = (p5) => {
     const width = capture.width * 1.25;
@@ -212,20 +109,20 @@ export function App() {
     const hands = handsfree.data?.hands;
     if (!hands?.multiHandLandmarks) return;
     if (
-        complete === false &&
-        hands?.gesture[0]?.name == "leftHand" &&
-        hands?.gesture[1]?.name == "rightHand" &&
-        hands.multiHandLandmarks[0][21].x < 0.5 &&
-        hands.multiHandLandmarks[0][21].y > 0.5 &&
-        hands.multiHandLandmarks[1][21].x > 0.5 &&
-        hands.multiHandLandmarks[1][21].y > 0.5
-        ) {
+      complete === false &&
+      hands?.gesture[0]?.name == "leftHand" &&
+      hands?.gesture[1]?.name == "rightHand" &&
+      hands.multiHandLandmarks[0][21].x < 0.5 &&
+      hands.multiHandLandmarks[0][21].y > 0.5 &&
+      hands.multiHandLandmarks[1][21].x > 0.5 &&
+      hands.multiHandLandmarks[1][21].y > 0.5
+    ) {
       complete = true;
       // console.log("水見式を開始");
       // 6系統からランダムに取得
       lot();
     }
-  }
+  };
 
   // landmarkにcircleを描画
   const drawHands = (p5, width, height) => {
@@ -262,7 +159,7 @@ export function App() {
         p5.circle(width - landmark.x * width, landmark.y * height, circleSize);
       });
     });
-  }
+  };
 
   // 水見式のコップ
   const drawCup = (p5, width, height) => {
@@ -275,14 +172,17 @@ export function App() {
     p5.fill(255);
     p5.quad(
       center - topDiameter / 2,
-      height - top, center + topDiameter / 2,
-      height - top, center + bottomDiameter / 2,
-      height - bottom, center - bottomDiameter / 2,
+      height - top,
+      center + topDiameter / 2,
+      height - top,
+      center + bottomDiameter / 2,
+      height - bottom,
+      center - bottomDiameter / 2,
       height - bottom
     );
-    p5.ellipse(center, height - top , topDiameter, 50);
-    p5.ellipse(center, height - bottom , bottomDiameter, 30);
-  }
+    p5.ellipse(center, height - top, topDiameter, 50);
+    p5.ellipse(center, height - bottom, bottomDiameter, 30);
+  };
 
   // ワイングラス
   const drawWineGlass = (p5, width, height) => {
@@ -290,7 +190,7 @@ export function App() {
     p5.ellipse(width / 2, height - 300, 225, 30);
     p5.ellipse(width / 2, height - 25, 150, 25);
     p5.rect(width / 2 - 5, height - 150, 10, 125);
-  }
+  };
 
   // 葉っぱ
   const drawLeaf = (p5, width, height) => {
@@ -323,7 +223,7 @@ export function App() {
         xmax = x;
         ymax = y;
       }
-      p5.fill("#42C668",);
+      p5.fill("#42C668");
       p5.vertex(x, y);
     }
 
@@ -336,7 +236,7 @@ export function App() {
     p5.stroke(0); // 線の色
     p5.strokeWeight(2); // 線の太さ
     p5.line(0, 0, xmax * petiole, ymax * petiole);
-  }
+  };
 
   // 6系統の中からランダムで取得
   // TODO:確率設定したい
@@ -352,48 +252,73 @@ export function App() {
 
     const rand = Math.floor(Math.random() * categories.length);
 
-    document.getElementById("result").innerText = `あなたのオーラは ${categories[rand]} です`;
+    document.getElementById(
+      "result"
+    ).innerText = `あなたのオーラは ${categories[rand]} です`;
     document.getElementById("retry").innerText = "もう一度";
-  }
+  };
 
   const [mediaIsActive, setMediaIsActive] = useState(false);
 
   const startWaterDivination = async () => {
     // カメラ使用の許可を要求
-    await navigator.mediaDevices.getUserMedia({video: true})
-    .then(function(stream) {
-      setMediaIsActive(stream.active);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
+    await navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(function (stream) {
+        setMediaIsActive(stream.active);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
 
     handsfree.start();
-  }
+  };
   const retry = () => {
     complete = false;
-    document.getElementById("result").innerText = '';
-    document.getElementById("retry").innerText = '判定中';
-  }
+    document.getElementById("result").innerText = "";
+    document.getElementById("retry").innerText = "判定中";
+  };
 
   return (
     <>
       <h1 class="title">Web水見式</h1>
       <div>
-        <p>水をたっぷりと入れて葉を浮かべたコップに手をかざして「練」を数秒間行ってください。<br/>変化に応じて自分のオーラがどの系統に属するかがわかります。</p>
         <p>
-          <button className="handsfree-show-when-stopped handsfree-hide-when-loading" onClick={startWaterDivination}>水見式を始める</button>
+          水をたっぷりと入れて葉を浮かべたコップに手をかざして「練」を数秒間行ってください。
+          <br />
+          変化に応じて自分のオーラがどの系統に属するかがわかります。
+        </p>
+        <p>
+          <button
+            className="handsfree-show-when-stopped handsfree-hide-when-loading"
+            onClick={startWaterDivination}
+          >
+            水見式を始める
+          </button>
           <button className="handsfree-show-when-loading">loading...</button>
-          <button className="handsfree-show-when-started" id="retry" onClick={retry}>判定中</button>
+          <button
+            className="handsfree-show-when-started"
+            id="retry"
+            onClick={retry}
+          >
+            判定中
+          </button>
         </p>
         <p id="result"></p>
-        {mediaIsActive ? <Sketch setup={setup} draw={draw}/> : null}
+        {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
         <p>
-          <a href="https://twitter.com/intent/tweet?text=あなたのオーラは○○系でした%20https://%20pic.twitter.com/@user" target="_blank" class="tweet_img">
-            <div>水見式の結果をツイートする <Icon icon="bi:twitter" aria-hidden="true" /></div>
+          <a
+            href="https://twitter.com/intent/tweet?text=あなたのオーラは○○系でした%20https://%20pic.twitter.com/@user"
+            target="_blank"
+            class="tweet_img"
+          >
+            <div>
+              水見式の結果をツイートする{" "}
+              <Icon icon="bi:twitter" aria-hidden="true" />
+            </div>
           </a>
         </p>
       </div>
     </>
-  )
+  );
 }
