@@ -3,7 +3,7 @@ import Sketch from "react-p5";
 import { Icon } from "@iconify/react";
 import { useState } from "preact/hooks";
 
-export function App() {
+export const App = () => {
   // handsfreeのhandモデルを準備
   window.handsfree.update({
     hands: true,
@@ -28,11 +28,9 @@ export function App() {
     capture = p5.createCapture(p5.VIDEO);
 
     // 映像をロードできたらキャンバスの大きさを設定
-    capture.elt.onloadeddata = function () {
+    capture.elt.onloadeddata = () => {
       videoDataLoaded = true;
-      p5.createCanvas(capture.width * 1.25, capture.height * 1.25).parent(
-        canvasParentRef
-      );
+      p5.createCanvas(capture.width, capture.height).parent(canvasParentRef);
     };
 
     // 映像を非表示化
@@ -44,7 +42,7 @@ export function App() {
       name: "leftHand",
       algorithm: "fingerpose",
       models: "hands",
-      confidence: 8.5,
+      confidence: 7.5,
       description: [
         ["addCurl", "Thumb", "NoCurl", 1],
         ["addDirection", "Thumb", "DiagonalUpLeft", 1],
@@ -72,7 +70,7 @@ export function App() {
       name: "rightHand",
       algorithm: "fingerpose",
       models: "hands",
-      confidence: 8.5,
+      confidence: 7.5,
       description: [
         ["addCurl", "Thumb", "NoCurl", 1],
         ["addDirection", "Thumb", "DiagonalUpRight", 1],
@@ -94,23 +92,23 @@ export function App() {
   };
 
   const draw = (p5) => {
-    const width = capture.width * 1.25;
-    const height = capture.height * 1.25;
+    const width = p5.width;
+    const height = p5.height;
     // 映像を左右反転させて表示
     p5.push();
     p5.translate(width, 0);
     p5.scale(-1, 1);
-    p5.image(capture, 0, 0, width, height);
+    if (capture.loadedmetadata) {
+      p5.image(capture, 0, 0, width, height);
+    }
     p5.pop();
 
     // コップ
     drawCup(p5, width, height);
-
+    // 手の頂点を表示
+    drawHands(p5);
     // 葉っぱ
     drawLeaf(p5, width, height);
-
-    // 手の頂点を表示
-    // drawHands(p5, width, height);
 
     // 水見式のジェスチャーを認識させる
     const hands = handsfree.data?.hands;
@@ -132,7 +130,7 @@ export function App() {
   };
 
   // landmarkにcircleを描画
-  const drawHands = (p5, width, height) => {
+  const drawHands = (p5) => {
     const hands = handsfree.data?.hands;
     const circleSize = 12;
 
@@ -163,7 +161,11 @@ export function App() {
             p5.fill(255);
         }
 
-        p5.circle(width - landmark.x * width, landmark.y * height, circleSize);
+        p5.circle(
+          p5.width - landmark.x * p5.width,
+          landmark.y * p5.height,
+          circleSize
+        );
       });
     });
   };
@@ -204,7 +206,7 @@ export function App() {
     const n = 4;
     const size = 100;
     const ox = width / 2 - 25;
-    const oy = height / 2;
+    const oy = height / 2 - 50;
     let xmax;
     let ymax;
     const veins = 0.9; //葉脈の長さ
@@ -286,7 +288,7 @@ export function App() {
         console.log(stream);
         setMediaIsActive(stream.active);
       })
-      .catch(function (err) {
+      .catch((err) => {
         console.log(err);
       });
 
@@ -340,4 +342,4 @@ export function App() {
       </div>
     </>
   );
-}
+};

@@ -1,6 +1,6 @@
-import { render } from 'preact'
-import { App } from './app'
-import './index.css'
+import { render } from "preact";
+import { App } from "./app";
+import "./index.css";
 import Handsfree from "handsfree";
 import "handsfree/build/lib/assets/handsfree.css";
 
@@ -9,4 +9,4 @@ window.handsfree = new Handsfree({
   showDebug: false,
 });
 
-render(<App />, document.getElementById('app'))
+render(<App />, document.getElementById("app"));
