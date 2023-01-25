@@ -110,6 +110,23 @@ export const App = () => {
     // 葉っぱ
     drawLeaf(p5, width, height);
 
+    // 系統ごとのエフェクト描画
+    // switch (resultCategory) {
+    //   case "強化系":
+    //     enhancerEffect();
+    //     break;
+    //   case "変化系":
+    //     break;
+    //   case "放出系":
+    //     break;
+    //   case "具現化系":
+    //     break;
+    //   case "操作系":
+    //     break;
+    //   case "特質系":
+    //     break;
+    // }
+
     // 水見式のジェスチャーを認識させる
     const hands = handsfree.data?.hands;
     if (!hands?.multiHandLandmarks) return;
@@ -247,7 +264,36 @@ export const App = () => {
     p5.line(0, 0, xmax * petiole, ymax * petiole);
   };
 
+  /**
+   * 6系統のエフェクト
+   */
+  // 強化系
+  const enhancerEffect = (p5) => {
+    p5.push();
+    p5.translate(p5.width / 2, p5.height / 2);
+
+    let d = 5;
+    let num = 1800;
+
+    p5.noStroke();
+
+    for (let j = 1; j <= 6; j++) {
+      p5.fill(255, 40 * j, 5);
+
+      for (let i = 0; i < num; i++) {
+        let R = 40 + 20 * j + 30 * p5.abs(p5.sin(p5.radians(i * 3)));
+
+        let x = R * p5.cos(p5.radians((360 * i) / num));
+        let y = R * p5.sin(p5.radians((360 * i) / num));
+
+        p5.circle(x, y, d);
+      }
+    }
+    p5.pop();
+  };
+
   // 6系統の中からランダムで取得
+  const [resultCategory, setResultCategory] = useState("");
   const lot = () => {
     const categories = [
       "強化系", // Enhancer
@@ -256,16 +302,15 @@ export const App = () => {
       "具現化系", // Manipulator
       "変化系", // Emitter
     ];
-    let resultCategory;
 
     const rand = Math.floor(Math.random() * 100);
-    console.log(rand);
+
     // 特質系が出る確率は10%
     if (rand < 10) {
-      resultCategory = "特質系"; // Specialist
+      setResultCategory("特質系"); // Specialist
     } else {
       const index = Math.floor(Math.random() * categories.length);
-      resultCategory = categories[index];
+      setResultCategory(categories[index]);
     }
 
     document.getElementById(
