@@ -129,11 +129,11 @@ export const App = () => {
 
     // 水見式のジェスチャーを認識させる
     const hands = handsfree.data?.hands;
-    if (!hands?.multiHandLandmarks) return;
+    if (!hands?.multiHandLandmarks || !hands?.gesture) return;
     if (
       complete === false &&
-      hands?.gesture[0]?.name == "leftHand" &&
-      hands?.gesture[1]?.name == "rightHand" &&
+      hands.gesture[0].name == "leftHand" &&
+      hands.gesture[1].name == "rightHand" &&
       hands.multiHandLandmarks[0][21].x < 0.5 &&
       hands.multiHandLandmarks[0][21].y > 0.5 &&
       hands.multiHandLandmarks[1][21].x > 0.5 &&
@@ -223,7 +223,7 @@ export const App = () => {
     const n = 4;
     const size = 100;
     const ox = width / 2 - 25;
-    const oy = height / 2 - 50;
+    const oy = height / 2 + 60;
     let xmax;
     let ymax;
     const veins = 0.9; //葉脈の長さ
@@ -323,20 +323,7 @@ export const App = () => {
 
   const startWaterDivination = async () => {
     // カメラ使用の許可を要求
-    await navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then(async (stream) => {
-        const devices = (
-          await navigator.mediaDevices.enumerateDevices()
-        ).filter((device) => device.kind === "videoinput");
-        console.log(devices);
-        console.log(stream);
-        setMediaIsActive(stream.active);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
+    handsfree.getUserMedia(setMediaIsActive(true));
     handsfree.start();
   };
 
@@ -372,7 +359,7 @@ export const App = () => {
         </p>
         <p id="result"></p>
         {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
-        <p>
+        {/*<p>
           <a
             href="https://twitter.com/intent/tweet?text=あなたのオーラは○○系でした%20https://%20pic.twitter.com/@user"
             target="_blank"
@@ -383,7 +370,7 @@ export const App = () => {
               <Icon icon="bi:twitter" aria-hidden="true" />
             </div>
           </a>
-        </p>
+        </p> */}
       </div>
     </>
   );
