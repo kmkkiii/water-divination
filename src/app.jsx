@@ -23,7 +23,12 @@ export const App = () => {
     ringFinger = "#00bbf9",
     pinky = "#9b5de5";
 
-  const setup = (p5, canvasParentRef) => {
+  const setup = async (p5, canvasParentRef) => {
+    const devices = (await navigator.mediaDevices.enumerateDevices()).filter(
+      (device) => device.kind === "videoinput"
+    );
+    console.log(devices);
+
     // webカメラの映像を準備
     capture = p5.createCapture(p5.VIDEO);
 
@@ -132,8 +137,8 @@ export const App = () => {
     if (!hands?.multiHandLandmarks || !hands?.gesture) return;
     if (
       complete === false &&
-      hands.gesture[0].name == "leftHand" &&
-      hands.gesture[1].name == "rightHand" &&
+      hands.gesture[0]?.name == "leftHand" &&
+      hands.gesture[1]?.name == "rightHand" &&
       hands.multiHandLandmarks[0][21].x < 0.5 &&
       hands.multiHandLandmarks[0][21].y > 0.5 &&
       hands.multiHandLandmarks[1][21].x > 0.5 &&
@@ -322,8 +327,20 @@ export const App = () => {
   const [mediaIsActive, setMediaIsActive] = useState(false);
 
   const startWaterDivination = async () => {
+    const constrains = { audio: false, video: true };
+
+    await navigator.mediaDevices
+      .getUserMedia(constrains)
+      .then(async (stream) => {
+        console.log(stream);
+        setMediaIsActive(stream.active);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     // カメラ使用の許可を要求
-    handsfree.getUserMedia(setMediaIsActive(true));
+    // handsfree.getUserMedia(setMediaIsActive(true));
     handsfree.start();
   };
 
