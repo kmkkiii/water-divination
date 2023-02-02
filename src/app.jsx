@@ -112,7 +112,13 @@ export const App = () => {
 
     // 水見式のジェスチャーを認識させる
     const hands = handsfree.data?.hands;
-    if (!hands?.multiHandLandmarks && !hands?.gesture) return;
+    if (
+      !hands?.multiHandLandmarks ||
+      (hands?.multiHandLandmarks.length === 0 &&
+        (!hands?.gesture[0] || !hands?.gesture[1]))
+    )
+      return;
+
     if (
       complete === false &&
       hands.gesture[0]?.name == "leftHand" &&
