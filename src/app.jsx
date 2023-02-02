@@ -114,6 +114,7 @@ export const App = () => {
     const hands = handsfree.data?.hands;
     if (
       !hands?.multiHandLandmarks ||
+      !hands?.gesture ||
       (hands?.multiHandLandmarks.length === 0 &&
         (!hands?.gesture[0] || !hands?.gesture[1]))
     )
@@ -287,11 +288,11 @@ export const App = () => {
     await navigator.mediaDevices
       .getUserMedia({ video: true })
       .then(async (stream) => {
-        const devices = (
-          await navigator.mediaDevices.enumerateDevices()
-        ).filter((device) => device.kind === "videoinput");
-        console.log(devices);
-        console.log(stream);
+        // const devices = (
+        //   await navigator.mediaDevices.enumerateDevices()
+        // ).filter((device) => device.kind === "videoinput");
+        // console.log(devices);
+        // console.log(stream);
         setMediaIsActive(stream.active);
       })
       .catch((err) => {
