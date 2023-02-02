@@ -112,6 +112,7 @@ export const App = () => {
 
     // 水見式のジェスチャーを認識させる
     const hands = handsfree.data?.hands;
+    console.log(hands);
     if (
       !hands?.multiHandLandmarks ||
       !hands?.gesture ||
