@@ -116,15 +116,16 @@ export const App = () => {
     if (
       !hands?.multiHandLandmarks ||
       !hands?.gesture ||
-      (hands?.multiHandLandmarks.length === 0 &&
-        (!hands?.gesture[0] || !hands?.gesture[1]))
+      hands?.multiHandLandmarks.length === 0
+      // &&
+      // (!hands?.gesture[0] || !hands?.gesture[1])
     )
       return;
 
     if (
       complete === false &&
-      hands.gesture[0]?.name == "leftHand" &&
-      hands.gesture[1]?.name == "rightHand" &&
+      // hands.gesture[0]?.name == "leftHand" &&
+      // hands.gesture[1]?.name == "rightHand" &&
       hands.multiHandLandmarks[0][21].x < 0.5 &&
       hands.multiHandLandmarks[0][21].y > 0.5 &&
       hands.multiHandLandmarks[1][21].x > 0.5 &&
@@ -255,6 +256,9 @@ export const App = () => {
     p5.line(0, 0, xmax * petiole, ymax * petiole);
   };
 
+  // 判定結果の系統
+  let resultCategory;
+
   // 6系統の中からランダムで取得
   const lot = () => {
     const categories = [
@@ -264,7 +268,6 @@ export const App = () => {
       "具現化系", // Manipulator
       "変化系", // Emitter
     ];
-    let resultCategory;
 
     const rand = Math.floor(Math.random() * 100);
     console.log(rand);
@@ -337,7 +340,7 @@ export const App = () => {
         {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
         <p>
           <a
-            href="https://twitter.com/intent/tweet?text=あなたのオーラは○○系でした%20https://%20pic.twitter.com/@user"
+            href={`https://twitter.com/intent/tweet?text=あなたのオーラは${resultCategory}でした%20https://%20pic.twitter.com/@user`}
             target="_blank"
             class="tweet_img"
           >
