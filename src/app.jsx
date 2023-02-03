@@ -117,15 +117,13 @@ export const App = () => {
       !hands?.multiHandLandmarks ||
       !hands?.gesture ||
       hands?.multiHandLandmarks.length === 0
-      // &&
-      // (!hands?.gesture[0] || !hands?.gesture[1])
     )
       return;
 
     if (
       complete === false &&
-      // hands.gesture[0]?.name == "leftHand" &&
-      // hands.gesture[1]?.name == "rightHand" &&
+      hands.gesture[0]?.name == "leftHand" &&
+      hands.gesture[1]?.name == "rightHand" &&
       hands.multiHandLandmarks[0][21].x < 0.5 &&
       hands.multiHandLandmarks[0][21].y > 0.5 &&
       hands.multiHandLandmarks[1][21].x > 0.5 &&
