@@ -7,7 +7,6 @@ export const App = () => {
   // handsfreeのhandモデルを準備
   window.handsfree.update({
     hands: true,
-    debug: false,
   });
 
   let capture;
@@ -113,7 +112,7 @@ export const App = () => {
 
     // 水見式のジェスチャーを認識させる
     const hands = handsfree.data?.hands;
-    // console.log(hands);
+    console.log(hands);
     if (
       !hands?.multiHandLandmarks ||
       !hands?.gesture ||
