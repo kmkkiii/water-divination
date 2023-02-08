@@ -89,6 +89,8 @@ export const App = () => {
         ["addDirection", "Pinky", "HorizontalRight", 1],
       ],
     });
+
+    console.log(handsfree);
   };
 
   const draw = (p5) => {
@@ -289,19 +291,13 @@ export const App = () => {
     // カメラ使用の許可を要求
     await navigator.mediaDevices
       .getUserMedia({ video: true })
-      .then(async (stream) => {
-        // const devices = (
-        //   await navigator.mediaDevices.enumerateDevices()
-        // ).filter((device) => device.kind === "videoinput");
-        // console.log(devices);
-        // console.log(stream);
-        setMediaIsActive(stream.active);
-      })
+      .then(async (stream) => {})
       .catch((err) => {
         console.log(err);
       });
 
     handsfree.start();
+    setMediaIsActive(true);
   };
 
   const retry = () => {
