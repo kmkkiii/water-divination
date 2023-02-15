@@ -7,6 +7,7 @@ import "handsfree/build/lib/assets/handsfree.css";
 window.handsfree = new Handsfree({
   hands: true,
   showDebug: false,
+  gesture: true,
 });
 
 render(<App />, document.getElementById("app"));
