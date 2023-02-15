@@ -17,12 +17,9 @@ export const App = () => {
     ringFinger = "#00bbf9",
     pinky = "#9b5de5";
 
-  const setup = async (p5, canvasParentRef) => {
-    // const devices = (await navigator.mediaDevices.enumerateDevices()).filter(
-    //   (device) => device.kind === "videoinput"
-    // );
-    // console.log(devices);
+  let array = new Array(360);
 
+  const setup = async (p5, canvasParentRef) => {
     // webカメラの映像を準備
     capture = p5.createCapture(p5.VIDEO);
 
@@ -35,33 +32,30 @@ export const App = () => {
     // 映像を非表示化
     capture.hide();
 
+    for (let i = 0; i < array.length; i++) {
+      array[i] = p5.floor(p5.randomGaussian(0, 15));
+    }
+
     // ジェスチャー登録
     // 水見式 左手
     handsfree.useGesture({
       name: "leftHand",
       algorithm: "fingerpose",
       models: "hands",
-      confidence: 7.5,
+      confidence: "7.5",
       description: [
         ["addCurl", "Thumb", "NoCurl", 1],
         ["addDirection", "Thumb", "DiagonalUpLeft", 1],
-        ["addCurl", "Index", "HalfCurl", 1],
-        ["addCurl", "Index", "NoCurl", 0.6666666666666666],
+        ["addCurl", "Index", "NoCurl", 1],
         ["addDirection", "Index", "HorizontalLeft", 1],
-        ["addDirection", "Index", "DiagonalUpLeft", 0.6666666666666666],
         ["addCurl", "Middle", "NoCurl", 1],
-        ["addCurl", "Middle", "HalfCurl", 0.5789473684210527],
         ["addDirection", "Middle", "HorizontalLeft", 1],
-        ["addDirection", "Middle", "DiagonalUpLeft", 0.5789473684210527],
         ["addCurl", "Ring", "NoCurl", 1],
-        ["addCurl", "Ring", "HalfCurl", 0.5],
         ["addDirection", "Ring", "HorizontalLeft", 1],
-        ["addDirection", "Ring", "DiagonalUpLeft", 0.034482758620689655],
         ["addCurl", "Pinky", "NoCurl", 1],
-        ["addCurl", "Pinky", "FullCurl", 0.13636363636363635],
-        ["addCurl", "Pinky", "HalfCurl", 0.22727272727272727],
         ["addDirection", "Pinky", "HorizontalLeft", 1],
       ],
+      enabled: true,
     });
 
     // 水見式 右手
@@ -74,17 +68,12 @@ export const App = () => {
         ["addCurl", "Thumb", "NoCurl", 1],
         ["addDirection", "Thumb", "DiagonalUpRight", 1],
         ["addCurl", "Index", "NoCurl", 1],
-        ["addCurl", "Index", "HalfCurl", 0.875],
         ["addDirection", "Index", "HorizontalRight", 1],
-        ["addDirection", "Index", "DiagonalUpRight", 0.5],
         ["addCurl", "Middle", "NoCurl", 1],
-        ["addCurl", "Middle", "HalfCurl", 0.42857142857142855],
         ["addDirection", "Middle", "HorizontalRight", 1],
         ["addCurl", "Ring", "NoCurl", 1],
-        ["addCurl", "Ring", "HalfCurl", 0.25],
         ["addDirection", "Ring", "HorizontalRight", 1],
         ["addCurl", "Pinky", "NoCurl", 1],
-        ["addCurl", "Pinky", "HalfCurl", 0.034482758620689655],
         ["addDirection", "Pinky", "HorizontalRight", 1],
       ],
     });
@@ -119,9 +108,9 @@ export const App = () => {
       hands.gesture[0]?.name == "leftHand" &&
       hands.gesture[1]?.name == "rightHand" &&
       hands.multiHandLandmarks[0][21].x < 0.5 &&
-      hands.multiHandLandmarks[0][21].y > 0.5 &&
-      hands.multiHandLandmarks[1][21].x > 0.5 &&
-      hands.multiHandLandmarks[1][21].y > 0.5
+      // hands.multiHandLandmarks[0][21].y > 0.5 &&
+      hands.multiHandLandmarks[1][21].x > 0.5
+      // hands.multiHandLandmarks[1][21].y > 0.5
     ) {
       complete = true;
 
@@ -130,18 +119,18 @@ export const App = () => {
 
       // 系統ごとのエフェクト描画
       switch (resultCategory) {
-        case "強化系":
-          enhancerEffect();
+        case "きょうかけい":
+          enhancerEffect(p5);
           break;
-        case "変化系":
+        case "へんかけい":
           break;
-        case "放出系":
+        case "ほうしゅつけい":
           break;
-        case "具現化系":
+        case "ぐげんかけい":
           break;
-        case "操作系":
+        case "そうさけい":
           break;
-        case "特質系":
+        case "とくしつけい":
           break;
       }
     }
@@ -190,6 +179,9 @@ export const App = () => {
     p5.pop();
   };
 
+  let f = 1;
+  let n = 1;
+
   // 水見式のコップ
   const drawCup = (p5, width, height) => {
     const center = width / 2;
@@ -209,8 +201,36 @@ export const App = () => {
       center - bottomDiameter / 2,
       height - bottom
     );
-    p5.ellipse(center, height - top, topDiameter, 50);
+    // p5.ellipse(center, height - top, topDiameter, 50);
+
     p5.ellipse(center, height - bottom, bottomDiameter, 30);
+
+    p5.push();
+    p5.noStroke();
+    p5.fill("#D0F7FF");
+    p5.ellipse(center, height - bottom - 2, bottomDiameter, 28);
+    p5.quad(
+      center - topDiameter / 2,
+      height - top,
+      center + topDiameter / 2,
+      height - top,
+      center + bottomDiameter / 2,
+      height - bottom - 2,
+      center - bottomDiameter / 2,
+      height - bottom - 2
+    );
+    p5.stroke(0);
+    p5.strokeWeight(0.75);
+    p5.ellipse(center, height - top, topDiameter, 50);
+
+    f += 1;
+    n += 1;
+    p5.noFill();
+    p5.stroke("#ffffff");
+    for (n = f % 200; n < topDiameter; n += 200) {
+      p5.ellipse(center, height - top, n, 30);
+    }
+    p5.pop();
   };
 
   // ワイングラス
@@ -273,25 +293,15 @@ export const App = () => {
   // 強化系
   const enhancerEffect = (p5) => {
     p5.push();
-    p5.translate(p5.width / 2, p5.height / 2);
+    p5.translate(p5.width / 2 - 25, p5.height / 2 - 50);
 
-    let d = 5;
-    let num = 1800;
-
-    p5.noStroke();
-
-    for (let j = 1; j <= 6; j++) {
-      p5.fill(255, 40 * j, 5);
-
-      for (let i = 0; i < num; i++) {
-        let R = 40 + 20 * j + 30 * p5.abs(p5.sin(p5.radians(i * 3)));
-
-        let x = R * p5.cos(p5.radians((360 * i) / num));
-        let y = R * p5.sin(p5.radians((360 * i) / num));
-
-        p5.circle(x, y, d);
-      }
+    for (let i = 0; i < array.length; i++) {
+      p5.rotate(p5.TWO_PI / array.length);
+      p5.stroke("#FF9900");
+      let dist = p5.abs(array[i]) * p5.random(0, 5);
+      p5.line(0, 0, dist, 0);
     }
+
     p5.pop();
   };
 
@@ -300,17 +310,17 @@ export const App = () => {
   const lot = () => {
     const categories = [
       "きょうかけい", // Enhancer
-      "ほうしゅつけい", // Transmuter
-      "そうさけい", // Conjurer
-      "ぐげんかけい", // Manipulator
-      "へんかけい", // Emitter
+      // "ほうしゅつけい", // Transmuter
+      // "そうさけい", // Conjurer
+      // "ぐげんかけい", // Manipulator
+      // "へんかけい", // Emitter
     ];
 
     const rand = Math.floor(Math.random() * 100);
 
     // 特質系が出る確率は10%
     if (rand < 10) {
-      setResultCategory("とくしつけい"); // Specialist
+      resultCategory = "とくしつけい"; // Specialist
     } else {
       const index = Math.floor(Math.random() * categories.length);
       resultCategory = categories[index];
@@ -343,7 +353,7 @@ export const App = () => {
   const retry = () => {
     complete = false;
     document.getElementById("result").innerText = "";
-    document.getElementById("retry").innerText = "判定中";
+    document.getElementById("retry").innerText = "はんていちゅう";
   };
 
   return (
