@@ -4,11 +4,6 @@ import { Icon } from "@iconify/react";
 import { useState } from "preact/hooks";
 
 export const App = () => {
-  // handsfreeのhandモデルを準備
-  window.handsfree.update({
-    hands: true,
-  });
-
   let capture;
 
   // webカメラのロードフラグ
