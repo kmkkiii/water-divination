@@ -61,6 +61,7 @@ button {
 }
 button:hover {
   border-color: #646cff;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 }
 button:focus,
 button:focus-visible {
