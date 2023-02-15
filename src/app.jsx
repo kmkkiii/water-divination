@@ -332,7 +332,7 @@ export const App = () => {
         </p>
         <p id="result"></p>
         {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
-        <p>
+        {/* <p>
           <a
             href={`https://twitter.com/intent/tweet?text=あなたのオーラは${resultCategory}でした%20https://%20pic.twitter.com/@user`}
             target="_blank"
@@ -343,7 +343,7 @@ export const App = () => {
               <Icon icon="bi:twitter" aria-hidden="true" />
             </div>
           </a>
-        </p>
+        </p> */}
       </div>
     </>
   );
