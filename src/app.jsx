@@ -1,6 +1,5 @@
 import "./app.css";
 import Sketch from "react-p5";
-import { Icon } from "@iconify/react";
 import { useState } from "preact/hooks";
 
 export const App = () => {
@@ -18,7 +17,12 @@ export const App = () => {
     ringFinger = "#00bbf9",
     pinky = "#9b5de5";
 
-  const setup = (p5, canvasParentRef) => {
+  const setup = async (p5, canvasParentRef) => {
+    // const devices = (await navigator.mediaDevices.enumerateDevices()).filter(
+    //   (device) => device.kind === "videoinput"
+    // );
+    // console.log(devices);
+
     // webカメラの映像を準備
     capture = p5.createCapture(p5.VIDEO);
 
@@ -109,14 +113,7 @@ export const App = () => {
 
     // 水見式のジェスチャーを認識させる
     const hands = handsfree.data?.hands;
-    console.log(hands);
-    if (
-      !hands?.multiHandLandmarks ||
-      !hands?.gesture ||
-      hands?.multiHandLandmarks.length === 0
-    )
-      return;
-
+    if (!hands?.multiHandLandmarks || !hands?.gesture) return;
     if (
       complete === false &&
       hands.gesture[0]?.name == "leftHand" &&
@@ -130,6 +127,23 @@ export const App = () => {
 
       // 6系統からランダムに取得
       lot();
+
+      // 系統ごとのエフェクト描画
+      switch (resultCategory) {
+        case "強化系":
+          enhancerEffect();
+          break;
+        case "変化系":
+          break;
+        case "放出系":
+          break;
+        case "具現化系":
+          break;
+        case "操作系":
+          break;
+        case "特質系":
+          break;
+      }
     }
   };
 
@@ -140,7 +154,8 @@ export const App = () => {
 
     // 手が検出されなければreturn
     if (!hands?.multiHandLandmarks) return;
-
+    p5.push();
+    p5.noStroke();
     // 手の数だけlandmarkの地点にcircleを描写
     hands.multiHandLandmarks.forEach((hand, handIndex) => {
       hand.forEach((landmark, landmarkIndex) => {
@@ -172,6 +187,7 @@ export const App = () => {
         );
       });
     });
+    p5.pop();
   };
 
   // 水見式のコップ
@@ -251,24 +267,50 @@ export const App = () => {
     p5.line(0, 0, xmax * petiole, ymax * petiole);
   };
 
-  // 判定結果の系統
-  let resultCategory;
+  /**
+   * 6系統のエフェクト
+   */
+  // 強化系
+  const enhancerEffect = (p5) => {
+    p5.push();
+    p5.translate(p5.width / 2, p5.height / 2);
+
+    let d = 5;
+    let num = 1800;
+
+    p5.noStroke();
+
+    for (let j = 1; j <= 6; j++) {
+      p5.fill(255, 40 * j, 5);
+
+      for (let i = 0; i < num; i++) {
+        let R = 40 + 20 * j + 30 * p5.abs(p5.sin(p5.radians(i * 3)));
+
+        let x = R * p5.cos(p5.radians((360 * i) / num));
+        let y = R * p5.sin(p5.radians((360 * i) / num));
+
+        p5.circle(x, y, d);
+      }
+    }
+    p5.pop();
+  };
 
   // 6系統の中からランダムで取得
+  let resultCategory = "";
   const lot = () => {
     const categories = [
-      "強化系", // Enhancer
-      "放出系", // Transmuter
-      "操作系", // Conjurer
-      "具現化系", // Manipulator
-      "変化系", // Emitter
+      "きょうかけい", // Enhancer
+      "ほうしゅつけい", // Transmuter
+      "そうさけい", // Conjurer
+      "ぐげんかけい", // Manipulator
+      "へんかけい", // Emitter
     ];
 
     const rand = Math.floor(Math.random() * 100);
-    console.log(rand);
+
     // 特質系が出る確率は10%
     if (rand < 10) {
-      resultCategory = "特質系"; // Specialist
+      setResultCategory("とくしつけい"); // Specialist
     } else {
       const index = Math.floor(Math.random() * categories.length);
       resultCategory = categories[index];
@@ -277,22 +319,25 @@ export const App = () => {
     document.getElementById(
       "result"
     ).innerText = `あなたのオーラは ${resultCategory} です`;
-    document.getElementById("retry").innerText = "もう一度";
+    document.getElementById("retry").innerText = "もういちど";
   };
 
   const [mediaIsActive, setMediaIsActive] = useState(false);
 
   const startWaterDivination = async () => {
-    // カメラ使用の許可を要求
+    const constrains = { audio: false, video: true };
+
     await navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then(async (stream) => {})
+      .getUserMedia(constrains)
+      .then(async (stream) => {
+        console.log(stream);
+        setMediaIsActive(stream.active);
+      })
       .catch((err) => {
         console.log(err);
       });
 
     handsfree.start();
-    setMediaIsActive(true);
   };
 
   const retry = () => {
@@ -303,42 +348,38 @@ export const App = () => {
 
   return (
     <>
-      <h1 class="title">Web水見式</h1>
+      {/* <h1 class="title">Web水見式</h1> */}
+      <h1 class="title hunter-font">うぇぶみずみしき</h1>
       <div>
-        <p>
-          水をたっぷりと入れて葉を浮かべたコップに手をかざして「練」を数秒間行ってください。
+        <p class="hunter-font">
+          {/* 水をたっぷりと入れて葉っぱを浮かべたコップに手をかざして「練」を数秒間行ってください。 */}
+          みずをたっぷりといれてはっぱをうかべたコップにてをかざして「れん」をすうびょうかんおこなってください。
         </p>
-        <p>変化に応じて自分のオーラがどの系統に属するかがわかります。</p>
+        {/* <p>変化に応じて自分のオーラがどの系統に属するかがわかります。</p> */}
+        <p class="hunter-font">
+          へんかにおうじてじぶんのオーラがどのけいとうにぞくするかがわかります。
+        </p>
         <p>
           <button
-            className="handsfree-show-when-stopped handsfree-hide-when-loading"
+            className="handsfree-show-when-stopped handsfree-hide-when-loading hunter-font"
             onClick={startWaterDivination}
           >
-            水見式を始める
+            {/* 水見式を始める */}
+            はじめる
           </button>
-          <button className="handsfree-show-when-loading">準備中...</button>
+          <button className="handsfree-show-when-loading hunter-font">
+            じゅんびちゅう
+          </button>
           <button
-            className="handsfree-show-when-started"
+            className="handsfree-show-when-started hutner-font"
             id="retry"
             onClick={retry}
           >
-            判定中...
+            はんていちゅう
           </button>
         </p>
-        <p id="result"></p>
+        <p class="hunter-font" id="result"></p>
         {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
-        {/* <p>
-          <a
-            href={`https://twitter.com/intent/tweet?text=あなたのオーラは${resultCategory}でした%20https://%20pic.twitter.com/@user`}
-            target="_blank"
-            class="tweet_img"
-          >
-            <div>
-              水見式の結果をツイートする{" "}
-              <Icon icon="bi:twitter" aria-hidden="true" />
-            </div>
-          </a>
-        </p> */}
       </div>
     </>
   );
