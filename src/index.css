@@ -1,5 +1,10 @@
+@font-face {
+  font-family: "HunterX2";
+  src: url("./assets/font/hunter.ttf");
+}
+
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "HunterX2";
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -32,6 +37,10 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+.hunter-font:hover {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 }
 
 h1 {

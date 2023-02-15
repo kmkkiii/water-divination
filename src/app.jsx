@@ -1,14 +1,8 @@
 import "./app.css";
 import Sketch from "react-p5";
-import { Icon } from "@iconify/react";
 import { useState } from "preact/hooks";
 
 export const App = () => {
-  // handsfreeのhandモデルを準備
-  window.handsfree.update({
-    hands: true,
-  });
-
   let capture;
 
   // webカメラのロードフラグ
@@ -24,10 +18,10 @@ export const App = () => {
     pinky = "#9b5de5";
 
   const setup = async (p5, canvasParentRef) => {
-    const devices = (await navigator.mediaDevices.enumerateDevices()).filter(
-      (device) => device.kind === "videoinput"
-    );
-    console.log(devices);
+    // const devices = (await navigator.mediaDevices.enumerateDevices()).filter(
+    //   (device) => device.kind === "videoinput"
+    // );
+    // console.log(devices);
 
     // webカメラの映像を準備
     capture = p5.createCapture(p5.VIDEO);
@@ -115,23 +109,6 @@ export const App = () => {
     // 葉っぱ
     drawLeaf(p5, width, height);
 
-    // 系統ごとのエフェクト描画
-    // switch (resultCategory) {
-    //   case "強化系":
-    //     enhancerEffect();
-    //     break;
-    //   case "変化系":
-    //     break;
-    //   case "放出系":
-    //     break;
-    //   case "具現化系":
-    //     break;
-    //   case "操作系":
-    //     break;
-    //   case "特質系":
-    //     break;
-    // }
-
     // 水見式のジェスチャーを認識させる
     const hands = handsfree.data?.hands;
     if (!hands?.multiHandLandmarks || !hands?.gesture) return;
@@ -148,6 +125,23 @@ export const App = () => {
 
       // 6系統からランダムに取得
       lot();
+
+      // 系統ごとのエフェクト描画
+      switch (resultCategory) {
+        case "強化系":
+          enhancerEffect();
+          break;
+        case "変化系":
+          break;
+        case "放出系":
+          break;
+        case "具現化系":
+          break;
+        case "操作系":
+          break;
+        case "特質系":
+          break;
+      }
     }
   };
 
@@ -158,7 +152,8 @@ export const App = () => {
 
     // 手が検出されなければreturn
     if (!hands?.multiHandLandmarks) return;
-
+    p5.push();
+    p5.noStroke();
     // 手の数だけlandmarkの地点にcircleを描写
     hands.multiHandLandmarks.forEach((hand, handIndex) => {
       hand.forEach((landmark, landmarkIndex) => {
@@ -190,6 +185,7 @@ export const App = () => {
         );
       });
     });
+    p5.pop();
   };
 
   // 水見式のコップ
@@ -228,7 +224,7 @@ export const App = () => {
     const n = 4;
     const size = 100;
     const ox = width / 2 - 25;
-    const oy = height / 2 + 60;
+    const oy = height / 2 - 50;
     let xmax;
     let ymax;
     const veins = 0.9; //葉脈の長さ
@@ -298,30 +294,30 @@ export const App = () => {
   };
 
   // 6系統の中からランダムで取得
-  const [resultCategory, setResultCategory] = useState("");
+  let resultCategory = "";
   const lot = () => {
     const categories = [
-      "強化系", // Enhancer
-      "放出系", // Transmuter
-      "操作系", // Conjurer
-      "具現化系", // Manipulator
-      "変化系", // Emitter
+      "きょうかけい", // Enhancer
+      "ほうしゅつけい", // Transmuter
+      "そうさけい", // Conjurer
+      "ぐげんかけい", // Manipulator
+      "へんかけい", // Emitter
     ];
 
     const rand = Math.floor(Math.random() * 100);
 
     // 特質系が出る確率は10%
     if (rand < 10) {
-      setResultCategory("特質系"); // Specialist
+      setResultCategory("とくしつけい"); // Specialist
     } else {
       const index = Math.floor(Math.random() * categories.length);
-      setResultCategory(categories[index]);
+      resultCategory = categories[index];
     }
 
     document.getElementById(
       "result"
     ).innerText = `あなたのオーラは ${resultCategory} です`;
-    document.getElementById("retry").innerText = "もう一度";
+    document.getElementById("retry").innerText = "もういちど";
   };
 
   const [mediaIsActive, setMediaIsActive] = useState(false);
@@ -339,8 +335,6 @@ export const App = () => {
         console.log(err);
       });
 
-    // カメラ使用の許可を要求
-    // handsfree.getUserMedia(setMediaIsActive(true));
     handsfree.start();
   };
 
@@ -352,42 +346,38 @@ export const App = () => {
 
   return (
     <>
-      <h1 class="title">Web水見式</h1>
+      {/* <h1 class="title">Web水見式</h1> */}
+      <h1 class="title hunter-font">うぇぶみずみしき</h1>
       <div>
-        <p>
-          水をたっぷりと入れて葉を浮かべたコップに手をかざして「練」を数秒間行ってください。
+        <p class="hunter-font">
+          {/* 水をたっぷりと入れて葉っぱを浮かべたコップに手をかざして「練」を数秒間行ってください。 */}
+          みずをたっぷりといれてはっぱをうかべたコップにてをかざして「れん」をすうびょうかんおこなってください。
         </p>
-        <p>変化に応じて自分のオーラがどの系統に属するかがわかります。</p>
+        {/* <p>変化に応じて自分のオーラがどの系統に属するかがわかります。</p> */}
+        <p class="hunter-font">
+          へんかにおうじてじぶんのオーラがどのけいとうにぞくするかがわかります。
+        </p>
         <p>
           <button
-            className="handsfree-show-when-stopped handsfree-hide-when-loading"
+            className="handsfree-show-when-stopped handsfree-hide-when-loading hunter-font"
             onClick={startWaterDivination}
           >
-            水見式を始める
+            {/* 水見式を始める */}
+            はじめる
           </button>
-          <button className="handsfree-show-when-loading">準備中...</button>
+          <button className="handsfree-show-when-loading hunter-font">
+            じゅんびちゅう
+          </button>
           <button
-            className="handsfree-show-when-started"
+            className="handsfree-show-when-started hutner-font"
             id="retry"
             onClick={retry}
           >
-            判定中...
+            はんていちゅう
           </button>
         </p>
-        <p id="result"></p>
+        <p class="hunter-font" id="result"></p>
         {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
-        {/*<p>
-          <a
-            href="https://twitter.com/intent/tweet?text=あなたのオーラは○○系でした%20https://%20pic.twitter.com/@user"
-            target="_blank"
-            class="tweet_img"
-          >
-            <div>
-              水見式の結果をツイートする{" "}
-              <Icon icon="bi:twitter" aria-hidden="true" />
-            </div>
-          </a>
-        </p> */}
       </div>
     </>
   );
