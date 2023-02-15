@@ -310,10 +310,10 @@ export const App = () => {
   const lot = () => {
     const categories = [
       "きょうかけい", // Enhancer
-      // "ほうしゅつけい", // Transmuter
-      // "そうさけい", // Conjurer
-      // "ぐげんかけい", // Manipulator
-      // "へんかけい", // Emitter
+      "ほうしゅつけい", // Transmuter
+      "そうさけい", // Conjurer
+      "ぐげんかけい", // Manipulator
+      "へんかけい", // Emitter
     ];
 
     const rand = Math.floor(Math.random() * 100);
