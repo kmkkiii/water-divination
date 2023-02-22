@@ -390,7 +390,7 @@ export const App = () => {
         {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
       </div>
       <footer style="font-family: Inter, Avenir, Helvetica, Arial, sans-serif;">
-        Copyright © 2023
+        Copyright © 2023　
         <a
           href="https://kmkkiii.tech/"
           target="_blank"
