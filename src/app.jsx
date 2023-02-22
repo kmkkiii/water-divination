@@ -1,6 +1,7 @@
 import "./app.css";
 import Sketch from "react-p5";
 import { useState } from "preact/hooks";
+import { ThreeDots } from "react-loader-spinner";
 
 export const App = () => {
   let capture;
@@ -75,6 +76,7 @@ export const App = () => {
   const draw = (p5) => {
     const width = p5.width;
     const height = p5.height;
+
     // 映像を左右反転させて表示
     p5.push();
     p5.translate(width, 0);
@@ -296,9 +298,13 @@ export const App = () => {
     p5.pop();
   };
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // 6系統の中からランダムで取得
   let resultCategory = "";
   const lot = () => {
+    setIsLoading(true);
+
     const categories = [
       "きょうかけい", // Enhancer
       "ほうしゅつけい", // Transmuter
@@ -317,10 +323,16 @@ export const App = () => {
       resultCategory = categories[index];
     }
 
-    document.getElementById(
-      "result"
-    ).innerText = `あなたのオーラは ${resultCategory} です`;
-    document.getElementById("retry").innerText = "もういちど";
+    setTimeout(
+      function () {
+        setIsLoading(false);
+        document.getElementById(
+          "result"
+        ).innerText = `あなたのオーラは ${resultCategory} です`;
+        document.getElementById("retry").innerText = "もういちど";
+      }.bind(this),
+      3000
+    );
   };
 
   const [mediaIsActive, setMediaIsActive] = useState(false);
@@ -379,11 +391,29 @@ export const App = () => {
             はんていちゅう
           </button>
         </p>
+        {isLoading ? (
+          <ThreeDots
+            height="50"
+            width="50"
+            radius="9"
+            color="#47B5FF"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{ display: "inline-block" }}
+            visible={true}
+          />
+        ) : null}
         <p class="hunter-font" id="result"></p>
         {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
       </div>
       <footer style="font-family: Inter, Avenir, Helvetica, Arial, sans-serif;">
-        Copyright © 2023 <a href="https://kmkkiii.tech/" target="_blank" rel="noreferrer noopener">kmkkiii</a>
+        Copyright © 2023{" "}
+        <a
+          href="https://kmkkiii.tech/"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          kmkkiii
+        </a>
       </footer>
     </>
   );
