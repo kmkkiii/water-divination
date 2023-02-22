@@ -10,13 +10,6 @@ export const App = () => {
 
   let complete = false;
 
-  // 各指のカラーパレット
-  const thumb = "#f15bb5",
-    indexFinger = "#fee440",
-    middleFinger = "#00f5d4",
-    ringFinger = "#00bbf9",
-    pinky = "#9b5de5";
-
   let array = new Array(360);
 
   const setup = async (p5, canvasParentRef) => {
@@ -108,9 +101,9 @@ export const App = () => {
       hands.gesture[0]?.name == "leftHand" &&
       hands.gesture[1]?.name == "rightHand" &&
       hands.multiHandLandmarks[0][21].x < 0.5 &&
-      // hands.multiHandLandmarks[0][21].y > 0.5 &&
-      hands.multiHandLandmarks[1][21].x > 0.5
-      // hands.multiHandLandmarks[1][21].y > 0.5
+      hands.multiHandLandmarks[0][21].y > 0.5 &&
+      hands.multiHandLandmarks[1][21].x > 0.5 &&
+      hands.multiHandLandmarks[1][21].y > 0.5
     ) {
       complete = true;
 
@@ -118,21 +111,21 @@ export const App = () => {
       lot();
 
       // 系統ごとのエフェクト描画
-      switch (resultCategory) {
-        case "きょうかけい":
-          enhancerEffect(p5);
-          break;
-        case "へんかけい":
-          break;
-        case "ほうしゅつけい":
-          break;
-        case "ぐげんかけい":
-          break;
-        case "そうさけい":
-          break;
-        case "とくしつけい":
-          break;
-      }
+      // switch (resultCategory) {
+      //   case "きょうかけい":
+      //     enhancerEffect(p5);
+      //     break;
+      //   case "へんかけい":
+      //     break;
+      //   case "ほうしゅつけい":
+      //     break;
+      //   case "ぐげんかけい":
+      //     break;
+      //   case "そうさけい":
+      //     break;
+      //   case "とくしつけい":
+      //     break;
+      // }
     }
   };
 
@@ -151,19 +144,19 @@ export const App = () => {
         // 指先だけ色を変更
         switch (landmarkIndex) {
           case 4:
-            p5.fill(thumb);
+            p5.fill(255);
             break;
           case 8:
-            p5.fill(indexFinger);
+            p5.fill(255);
             break;
           case 12:
-            p5.fill(middleFinger);
+            p5.fill(255);
             break;
           case 16:
-            p5.fill(ringFinger);
+            p5.fill(255);
             break;
           case 20:
-            p5.fill(pinky);
+            p5.fill(255);
             break;
           default:
             p5.fill(255);
@@ -359,7 +352,7 @@ export const App = () => {
   return (
     <>
       {/* <h1 class="title">Web水見式</h1> */}
-      <h1 class="title hunter-font">うぇぶみずみしき</h1>
+      <h1 class="title hunter-font">うぇぶみずみしき ベータ</h1>
       <div>
         <p class="hunter-font">
           {/* 水をたっぷりと入れて葉っぱを浮かべたコップに手をかざして「練」を数秒間行ってください。 */}
@@ -391,6 +384,9 @@ export const App = () => {
         <p class="hunter-font" id="result"></p>
         {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
       </div>
+      <footer style="font-family: Inter, Avenir, Helvetica, Arial, sans-serif;">
+        Copyright © 2023 <a href="https://kmkkiii.tech/" target="_blank" rel="noreferrer noopener">kmkkiii</a>
+      </footer>
     </>
   );
 };

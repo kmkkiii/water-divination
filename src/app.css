@@ -8,3 +8,7 @@
   font-weight: bold;
   font-size: 24;
 }
+
+.hunter-font:hover {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
