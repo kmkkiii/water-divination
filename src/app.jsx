@@ -194,7 +194,6 @@ export const App = () => {
       center - bottomDiameter / 2,
       height - bottom
     );
-    // p5.ellipse(center, height - top, topDiameter, 50);
 
     p5.ellipse(center, height - bottom, bottomDiameter, 30);
 
@@ -298,12 +297,12 @@ export const App = () => {
     p5.pop();
   };
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   // 6系統の中からランダムで取得
   let resultCategory = "";
   const lot = () => {
-    setIsLoading(true);
+    // setIsLoading(true);
 
     const categories = [
       "きょうかけい", // Enhancer
@@ -322,17 +321,11 @@ export const App = () => {
       const index = Math.floor(Math.random() * categories.length);
       resultCategory = categories[index];
     }
-
-    setTimeout(
-      function () {
-        setIsLoading(false);
-        document.getElementById(
-          "result"
-        ).innerText = `あなたのオーラは ${resultCategory} です`;
-        document.getElementById("retry").innerText = "もういちど";
-      }.bind(this),
-      3000
-    );
+    // setIsLoading(false);
+    document.getElementById(
+      "result"
+    ).innerText = `あなたのオーラは ${resultCategory} です`;
+    document.getElementById("retry").innerText = "もういちど";
   };
 
   const [mediaIsActive, setMediaIsActive] = useState(false);
@@ -391,22 +384,11 @@ export const App = () => {
             はんていちゅう
           </button>
         </p>
-        {isLoading ? (
-          <ThreeDots
-            height="50"
-            width="50"
-            radius="9"
-            color="#47B5FF"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{ display: "inline-block" }}
-            visible={true}
-          />
-        ) : null}
         <p class="hunter-font" id="result"></p>
         {mediaIsActive ? <Sketch setup={setup} draw={draw} /> : null}
       </div>
       <footer style="font-family: Inter, Avenir, Helvetica, Arial, sans-serif;">
-        Copyright © 2023{" "}
+        Copyright © 2023
         <a
           href="https://kmkkiii.tech/"
           target="_blank"
